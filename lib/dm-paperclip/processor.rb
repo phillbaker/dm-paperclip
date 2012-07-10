@@ -40,18 +40,27 @@ module Paperclip
   # on this blog post:
   # http://marsorange.com/archives/of-mogrify-ruby-tempfile-dynamic-class-definitions
   class Tempfile < ::Tempfile
-    # This is Ruby 1.8.7's implementation.
-    if RUBY_VERSION <= "1.8.6"
-      def make_tmpname(basename, n)
-        case basename
-        when Array
-          prefix, suffix = *basename
-        else
-          prefix, suffix = basename, ''
-        end
-
-        t = Time.now.strftime("%y%m%d")
-        path = "#{prefix}#{t}-#{$$}-#{rand(0x100000000).to_s(36)}-#{n}#{suffix}"
+# <<<<<<< HEAD
+#     # This is Ruby 1.8.7's implementation.
+#     if RUBY_VERSION <= "1.8.6"
+#       def make_tmpname(basename, n)
+#         case basename
+#         when Array
+#           prefix, suffix = *basename
+#         else
+#           prefix, suffix = basename, ''
+#         end
+# 
+#         t = Time.now.strftime("%y%m%d")
+#         path = "#{prefix}#{t}-#{$$}-#{rand(0x100000000).to_s(36)}-#{n}#{suffix}"
+# =======
+    # Replaces Tempfile's +make_tmpname+ with one that honors file extensions.
+    def make_tmpname(basename, n)
+      extension = File.extname(basename)
+      if n
+        "#{rand(0x100000000).to_s(36)}-#{$$}-#{n}#{extension}"
+      else
+        "#{rand(0x100000000).to_s(36)}-#{$$}#{extension}"
       end
     end
   end

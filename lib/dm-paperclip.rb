@@ -51,6 +51,8 @@ require 'dm-paperclip/callbacks'
 # The base module that gets included in ActiveRecord::Base. See the
 # documentation for Paperclip::ClassMethods for more useful information.
 module Paperclip
+  VERSION = "2.4.1"
+
   # To configure Paperclip, put this code in an initializer, Rake task, or wherever:
   #
   #   Paperclip.configure do |config|
@@ -172,7 +174,8 @@ module Paperclip
     end
 
     def processor name #:nodoc:
-      name = DataMapper::Inflector.classify(name.to_s)
+      # name = DataMapper::Inflector.classify(name.to_s)
+      name = name.to_s.camelize
       processor = Paperclip.const_get(name)
       unless processor.ancestors.include?(Paperclip::Processor)
         raise PaperclipError.new("[paperclip] Processor #{name} was not found")
@@ -339,7 +342,7 @@ module Paperclip
       end
 
       if Paperclip.config.use_dm_validations
-        validators.add(Paperclip::Validate::CopyAttachmentErrors, [name])
+        validators.add(Paperclip::Validate::CopyAttachmentErrors, name)
       end
 
     end
