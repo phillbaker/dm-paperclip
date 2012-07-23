@@ -30,6 +30,7 @@ require 'digest'
 require 'tempfile'
 
 require 'dm-core'
+require 'extlib'
 
 require 'dm-paperclip/ext/compatibility'
 require 'dm-paperclip/ext/class'
@@ -175,7 +176,8 @@ module Paperclip
 
     def processor name #:nodoc:
       # name = DataMapper::Inflector.classify(name.to_s)
-      name = name.to_s.camelize
+      # name = name.to_s.camelize
+      name = name.to_s.camel_case
       processor = Paperclip.const_get(name)
       unless processor.ancestors.include?(Paperclip::Processor)
         raise PaperclipError.new("[paperclip] Processor #{name} was not found")

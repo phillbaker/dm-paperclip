@@ -1,27 +1,15 @@
-require 'rubygems'
-
-require 'simplecov'
-SimpleCov.start do
-  add_filter "/test/"
-end
-
-require 'tempfile'
-require 'fileutils'
+require 'bundler'
 require 'test/unit'
 
 require 'shoulda'
 require 'mocha'
 
-require 'dm-core'
-require 'dm-validations'
-require 'dm-migrations'
+RUBY_VERSION >= '1.9.0' ? require("debugger") : require('ruby-debug')
 
-`ruby -e 'exit 0'` # Prime $? with a value.
+Bundler.setup(:default, :development)
 
-begin
-  require 'ruby-debug'
-rescue LoadError => e
-end
+require "dm-migrations"
+require "dm-validations"
 
 ROOT = File.join(File.dirname(__FILE__), '..')
 
@@ -34,10 +22,8 @@ class Test::Unit::TestCase
   end
 end
 
-$LOAD_PATH << File.join(ROOT, 'lib')
-$LOAD_PATH << File.join(ROOT, 'lib', 'dm-paperclip')
-
-require File.join(ROOT, 'lib', 'dm-paperclip.rb')
+$:.push File.expand_path("../lib", File.dirname(__FILE__))
+require 'dm-paperclip'
 
 ENV['RAILS_ENV'] ||= 'test'
 
@@ -65,12 +51,14 @@ def rebuild_class options = {}
   Object.const_set("Dummy", Class.new)
   Dummy.class_eval do
     include DataMapper::Resource
-    include DataMapper::Validate
+    #include DataMapper::Validate
+    # => include DataMapper::Validations
     include Paperclip::Resource
     property :id, ::DataMapper::Property::Serial
     property :other, String
     has_attached_file :avatar, options
   end
+  DataMapper.auto_migrate!
 end
 
 class FakeModel

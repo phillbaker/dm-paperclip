@@ -1,21 +1,31 @@
-source 'http://rubygems.org'
-gemspec
+source :rubygems
+#gemspec
 
-group :development, :test do
-  gem 'dm-migrations'
-  gem 'dm-validations'
-  gem 'dm-sqlite-adapter'
+gem "dm-core", ">= 1.2.0"
+gem "dm-validations", ">= 1.2.0"
+gem "dm-migrations", ">= 1.2.0"
+gem "extlib", ">= 0"
 
-  gem 'rake', '~> 0.8.7'
-  gem 'shoulda'
-  gem 'mocha'
-  gem 'aws-s3'
-  gem 'simplecov', :require => false
+group :development do
+  gem "jeweler", "~> 1.8.0"
+  gem "yard", "~> 0.8.1"
+end
 
-  if RUBY_VERSION < '1.9'
-    gem 'test-unit'
-    gem 'ruby-debug'
+group :test do
+  gem "shoulda", ">= 0"
+  gem "mocha", "= 0.9.8"
+  gem "aws-s3", ">= 0"
+  gem "dm-sqlite-adapter", ">= 0"
+  gem "do_sqlite3", ">= 0"
+
+  gem "database_cleaner", "~> 0.7.2"
+  if RUBY_VERSION >= '1.9.0'
+    gem "debugger", "~> 1.1.3"
+    gem "simplecov", "~> 0.6.4"
   else
-    gem 'ruby-debug19'
+    gem 'ruby-debug'
+    gem "rcov", "~> 1.0.0"
   end
 end
+
+>>>>>>> 4821db3... Validation is working with dm 1.2.0. Tests are passing

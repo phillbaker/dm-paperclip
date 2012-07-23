@@ -1,15 +1,37 @@
+# encoding: utf-8
+
+require 'rubygems'
+require 'bundler'
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
-require 'rake/gempackagetask'
+require 'jeweler'
+require 'yard'
 
-$LOAD_PATH << File.join(File.dirname(__FILE__), 'lib')
-require 'dm-core'
-require 'dm-validations'
-require 'dm-paperclip'
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
 
-desc 'Default: run unit tests.'
-task :default => [:clean, :all]
+# desc 'Default: run unit tests.'
+# task :default => [:clean, :all]
+
+Jeweler::Tasks.new do |gem|
+  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+
+  gem.name              = "dm-paperclip"
+  gem.author            = "Ken Robertson"
+  gem.email             = "ken@invalidlogic.com"
+  gem.homepage          = "http://invalidlogic.com/dm-paperclip/"
+  gem.platform          = Gem::Platform::RUBY
+  gem.summary           = "File attachments as attributes for DataMapper, based on the original Paperclip by Jon Yurek at Thoughtbot"
+
+  gem.requirements << "ImageMagick"
+
+end
+Jeweler::RubygemsDotOrgTasks.new
 
 # Test tasks
 desc 'Test the DM-Paperclip library.'
@@ -18,6 +40,11 @@ Rake::TestTask.new(:test) do |t|
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
+
+YARD::Rake::YardocTask.new
+
+desc 'Default: run unit tests.'
+task :default => [:clean, :test]
 
 # Console 
 desc "Open an irb session preloaded with this library"
@@ -51,6 +78,7 @@ task :clean do |t|
   FileUtils.rm_rf "pkg"
   FileUtils.rm_rf "log"
 end
+<<<<<<< HEAD
 
 spec = Gem::Specification.new do |s| 
   s.name              = "dm-paperclip"

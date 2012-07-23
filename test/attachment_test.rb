@@ -1,6 +1,5 @@
-# encoding: utf-8
-require './test/helper'
-
+require File.expand_path("./helper", File.dirname(__FILE__))
+s
 class Dummy
   # This is a dummy class
 end
